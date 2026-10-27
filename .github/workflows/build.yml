@@ -1,15 +1,26 @@
-steps:
-  - uses: actions/checkout@v4
+name: Build Windows EXE
 
-  - uses: egor-tensin/setup-mingw@v3
-    with:
-      platform: x64
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
 
-  - name: Compile
-    run: g++ -std=c++17 -O2 -static -static-libgcc -static-libstdc++ main.cpp -o jacobi.exe
+jobs:
+  build:
+    runs-on: windows-latest
 
-  - name: Upload EXE
-    uses: actions/upload-artifact@v4
-    with:
-      name: jacobi-windows
-      path: jacobi.exe
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: egor-tensin/setup-mingw@v3
+        with:
+          platform: x64
+
+      - name: Compile
+        run: g++ -std=c++17 -O2 -static -static-libgcc -static-libstdc++ main.cpp -o jacobi.exe
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacobi-windows
+          path: jacobi.exe
