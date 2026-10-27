@@ -1,5 +1,6 @@
 
- // Computing eigenvectors of a matrix up to 100x100 using the Jacobi method
+ // Computing eigenvectors of a symmetric matrix up to 100x100
+ // using the Jacobi method
  // Levshin I.A., 20.2 MKN
 
 #include <iostream>
@@ -7,6 +8,7 @@
 #include <cmath>
 #include <iomanip>
 #include <algorithm>
+#include <limits>
 
 using namespace std;
 
@@ -91,10 +93,12 @@ int main() {
     int n;
 
     cout << "Enter matrix size (1..100): ";
-    cin >> n;
-
-    if (!cin || n < 1 || n > MAX_N) {
+    if (!(cin >> n) || n < 1 || n > MAX_N) {
         cout << "Invalid matrix size.\n";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Press Enter to exit...";
+        cin.get();
         return 1;
     }
 
@@ -104,10 +108,12 @@ int main() {
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            cin >> A[i][j];
-
-            if (!cin || !isfinite(A[i][j])) {
+            if (!(cin >> A[i][j]) || !isfinite(A[i][j])) {
                 cout << "Invalid matrix element.\n";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Press Enter to exit...";
+                cin.get();
                 return 1;
             }
         }
@@ -121,6 +127,9 @@ int main() {
 
             if (abs(A[i][j] - A[j][i]) > 1e-12 * scale) {
                 cout << "The Jacobi method works only with symmetric matrices.\n";
+                cout << "Press Enter to exit...";
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.get();
                 return 1;
             }
         }
@@ -130,6 +139,9 @@ int main() {
 
     if (!jacobi(A, V, n)) {
         cout << "Method did not converge.\n";
+        cout << "Press Enter to exit...";
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin.get();
         return 1;
     }
 
@@ -144,10 +156,8 @@ int main() {
     }
 
     cout << "\nPress Enter to exit...";
-    cin.ignore(10000, '\n');
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cin.get();
 
-    return 0;
-}
     return 0;
 }
