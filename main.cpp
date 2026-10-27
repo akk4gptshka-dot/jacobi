@@ -143,5 +143,11 @@ int main() {
         cout << '\n';
     }
 
+    cout << "\nPress Enter to exit...";
+    cin.ignore(10000, '\n');
+    cin.get();
+
+    return 0;
+}
     return 0;
 }
