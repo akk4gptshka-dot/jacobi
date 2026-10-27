@@ -1,6 +1,6 @@
-//Вычисление собственных векторов матрицы 100х100 методом Якоби
-//Левшин И.А., 20.2 МКН
 
+ // Computing eigenvectors of a matrix up to 100x100 using the Jacobi method
+ // Levshin I.A., 20.2 MKN
 
 #include <iostream>
 #include <vector>
@@ -90,21 +90,26 @@ bool jacobi(Matrix A, Matrix& V, int n) {
 int main() {
     int n;
 
-    cout << "Введите размерность матрицы (от 1 до 100): ";
+    cout << "Enter matrix size (1..100): ";
     cin >> n;
 
     if (!cin || n < 1 || n > MAX_N) {
-        cout << "Неподходящий размер.\n";
+        cout << "Invalid matrix size.\n";
         return 1;
     }
 
     Matrix A(n, vector<double>(n));
 
-    cout << "Введите элементы матрицы строка за строкой: \n";
+    cout << "Enter matrix elements row by row:\n";
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             cin >> A[i][j];
+
+            if (!cin || !isfinite(A[i][j])) {
+                cout << "Invalid matrix element.\n";
+                return 1;
+            }
         }
     }
 
@@ -115,7 +120,7 @@ int main() {
             });
 
             if (abs(A[i][j] - A[j][i]) > 1e-12 * scale) {
-                cout << "Метод Якоби работает только на симметричных матрицах.\n";
+                cout << "The Jacobi method works only with symmetric matrices.\n";
                 return 1;
             }
         }
@@ -124,11 +129,11 @@ int main() {
     Matrix V;
 
     if (!jacobi(A, V, n)) {
-        cout << "Метод не сошелся.\n";
+        cout << "Method did not converge.\n";
         return 1;
     }
 
-    cout << "\nПолученные собственные вектора: \n";
+    cout << "\nComputed eigenvectors (columns of V):\n";
     cout << fixed << setprecision(6);
 
     for (int i = 0; i < n; i++) {
